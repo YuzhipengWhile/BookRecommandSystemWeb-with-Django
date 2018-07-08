@@ -2,7 +2,17 @@ import random
 
 import requests
 from lxml.html import etree
-
+headers = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Encoding': 'gzip, deflate',
+    'Accept-Language': 'zh-CN,zh;q=0.9',
+    'Cache-Control': 'max-age=0',
+    'Connection': 'keep-alive',
+    'Cookie': 'UM_distinctid=1633a80bb95339-096e7ba2edcff7-444a022e-144000-1633a80bb9644f; safedog-flow-item=3A4EB19447C00C8E30CF1A58FF340D86; yunsuo_session_verify=a0515ac15580a40410a7ee5bd4dc594d',
+    'Host': 'opac.szpt.edu.cn:8991',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
+}
 
 def getRandomAlphet():
     result = ''
@@ -12,30 +22,19 @@ def getRandomAlphet():
 # 获取秘钥
 def getSecretKey():
     keyUrl = 'http://opac.szpt.edu.cn:8991/F/'+getRandomAlphet()
-    print('url:' + keyUrl)
-    response = requests.get(url=keyUrl)
+    # print('loginUrl:',keyUrl)
+    response = requests.get(url=keyUrl,headers=headers)
     response.encoding = 'utf-8'
-    
+    print(response.text)
     selector = etree.HTML(response.text)
-    secretKey = selector.xpath('//a[contains(text(),"登录")]/@href')[0]
+    secretKey = selector.xpath('//a[contains(text(),"检索首页")]/@href')[0]
 
     startIndex = secretKey.find('/F/') + 3
     endIndex = secretKey.find('?')
     secretKey = secretKey[startIndex:endIndex]
     return secretKey
 
-headers = {
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-    'Accept-Encoding': 'gzip, deflate',
-    'Accept-Language': 'zh-CN,zh;q=0.9',
-    'Connection': 'keep-alive',
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Cookie': 'UM_distinctid=1633a80bb95339-096e7ba2edcff7-444a022e-144000-1633a80bb9644f; yunsuo_session_verify=91fe09a4c281230cc7ac35a0823ffe12',
-    'Host': 'opac.szpt.edu.cn:8991',
-    'Origin': 'http://opac.szpt.edu.cn:8991',
-    'Upgrade-Insecure-Requests': '1',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36',
-}
+
 
 data = {
     'func': 'login-session',
@@ -50,6 +49,8 @@ def login(user,password):
 
     response = requests.get(url,headers=headers)
     response.encoding = 'utf-8'
+
+    # print(response.text)
 
     selector = etree.HTML(response.text)
 
@@ -75,7 +76,7 @@ def login(user,password):
 if __name__ == "__main__":
 
     # getRandomAlphet()
-    print(login('16240011', '19970904')[1].text)
+    login('16240011', '19970904')[1].text
     # login('16240011', '19970904')
 
     # login('16240011', '19970904')

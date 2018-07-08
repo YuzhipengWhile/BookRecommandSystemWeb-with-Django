@@ -41,15 +41,18 @@ def getVoiceVerificationCode(request:HttpRequest):
         content = getData.get('content',None)
         print('content',content)
 
+
         # 对得到的content进行base64解密
         content = base64.b64decode(content).decode('UTF-8')
 
         print('解密后:',content)
-
         if content:
-            # 音频字节流
-            bitContent = Spider.googleSpider.GoogleSpider().getAudio(content)
-            return HttpResponse(bitContent,content_type='audio/mpeg')
+            try:
+                # 音频字节流
+                bitContent = Spider.googleSpider.GoogleSpider().getAudio(content)
+                return HttpResponse(bitContent,content_type='audio/mpeg')
+            except:
+                pass
     errorResult = {'status':False,'errorMsg':'请求语音验证码出错'}
     return HttpResponse(json.dumps(errorResult),content_type='application/json')
 
@@ -97,9 +100,8 @@ def autoBorrow(request:HttpRequest)->HttpResponse:
 
         print('从数据库中得到的user为:',user)
 
-        Spider.autoBarrowBookSpider.wholeAutoBorrow(user=user['userName'],password=user['password'],receivers=(user['email'],))
+        successResult = Spider.autoBarrowBookSpider.wholeAutoBorrow(user=user['userName'],password=user['password'],receivers=(user['email'],))
 
-        successResult = {'status':True,'errorMsg':''}
         return HttpResponse(json.dumps(successResult), content_type='application/json')
     errorResult = {'status':False,'errorMsg':'请求自动续借错误'}
     return HttpResponse(json.dumps(errorResult),content_type='application/json')

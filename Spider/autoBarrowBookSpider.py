@@ -131,7 +131,12 @@ def autoBorrow(response,bookDetailList):
         name = bookDetail[1]
         repayDay = bookDetail[3]
         branchLibrary = bookDetail[5]
-        book = Book.BorrowBook(name=name,repayYear=repayDay,branchLibray=branchLibrary)
+        # book = Book.BorrowBook(name=name,repayYear=repayDay,branchLibray=branchLibrary)
+        book = {
+            'name':name,
+            'repayDay':repayDay,
+            'branchLibray':branchLibrary
+        }
         fails.append(book)
 
     successBorrowBooks = selector.xpath('//table[not(contains(./tr/th[last()]/text(),"未能续借的原因"))]//tr')
@@ -140,7 +145,11 @@ def autoBorrow(response,bookDetailList):
         name = bookDetail[1]
         repayDay = bookDetail[3]
         branchLibrary = bookDetail[5]
-        book = Book.BorrowBook(name=name, repayYear=repayDay, branchLibray=branchLibrary)
+        book = {
+            'name': name,
+            'repayDay': repayDay,
+            'branchLibray': branchLibrary
+        }
         successes.append(book)
     return successes,fails
 
@@ -173,22 +182,7 @@ def wholeAutoBorrow(user,password,receivers=('16240011@mail.szpt.edu.cn',)):
     sucess = borrowResult[0]
     fails = borrowResult[1]
 
-    # 发送邮件通知用户
-    if len(urgentBooks) >= 0 or True:
-        successCotent = ''.join(['<li>'+str(bookName)+'</li>' for bookName in sucess])
-        failCotent = ''.join(['<li>' + str(bookName)+ '</li>' for bookName in fails])
-        content = '''
-            <p>续借成功的书籍有:</p>
-            <ul>
-                {successContent}
-            </ul>
-            <p>续借失败的书籍有:</p>
-            <ul>
-               {failContent}
-            </ul>
-        '''.format(successContent=successCotent,failContent=failCotent)
-        emailManger.sendEmail(content=content,title='图书借阅系统',receivers=receivers)
-
+    return {'successBooks':sucess,'failBooks':fails}
 if __name__ == "__main__":
     # response = loginSpider.login('16240011','19970904')[1]
     # r = getBorrowBooks(response)
@@ -205,4 +199,4 @@ if __name__ == "__main__":
     # print('续借失败的书籍')
     # for i in l[1]:
     #     print(i)
-    wholeAutoBorrow('16240011','19970904')
+    print(wholeAutoBorrow('16240011','19970904'))
