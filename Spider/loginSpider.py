@@ -74,13 +74,4 @@ def login(user,password):
         return False,None
 
 if __name__ == "__main__":
-
-    # getRandomAlphet()
-    login('16240011', '19970904')[1].text
-    # login('16240011', '19970904')
-
-    # login('16240011', '19970904')
-    # login('16240011', '19970904')
-    # login('16240011', '19970904')
-    # login('16240011','19970904')
-    # login('16240011','19970904')
+    pass
