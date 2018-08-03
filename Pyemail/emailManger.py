@@ -2,12 +2,12 @@ import smtplib
 from email.mime.text import MIMEText
 
 mail_host = 'smtp.exmail.qq.com'
-mail_user = '16240011@mail.szpt.edu.cn'
-mail_pass = 'Sz09043330'
-sender = '16240011@mail.szpt.edu.cn'
+mail_user = '保密'
+mail_pass = '保密'
+sender = '保密'
 
 # 用于发送HTML邮件
-def sendEmail(content,title,receivers = ('16240011@mail.szpt.edu.cn',)):
+def sendEmail(content,title,receivers = ('保密',)):
     message = MIMEText(content,'html','utf-8')
 
     message['From'] = 'sjm'
