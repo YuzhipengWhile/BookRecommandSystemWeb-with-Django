@@ -99,9 +99,9 @@ DATABASES = {
         'ENGINE' : 'django.db.backends.mysql',
         'NAME' : 'BookSystemData',
         'HOST' : '',
-        'PORT' : '3306',
+        'PORT' : 'xxx',
         'USER' : 'root',
-        'PASSWORD' : '09043330'
+        'PASSWORD' : 'xxxxx'
     }
 }
 
